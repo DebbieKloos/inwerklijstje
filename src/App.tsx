@@ -1,10 +1,11 @@
-import React, { useState } from 'react'
-import InputWizard from './components/InputWizard'
-import ChecklistOutput from './components/ChecklistOutput'
-import './App.css'
+import React, { useState } from "react";
+import InputWizard from "./components/InputWizard";
+import ChecklistOutput from "./components/ChecklistOutput";
+import { ChecklistItem } from "./lib/generateChecklist";
+import "./App.css";
 
 function App() {
-  const [checklist, setChecklist] = useState<string[]>([])
+  const [checklist, setChecklist] = useState<ChecklistItem[]>([]);
 
   return (
     <div className="max-w-2xl mx-auto p-6">
@@ -12,13 +13,13 @@ function App() {
         Slim Inwerklijstje
       </h1>
 
-      {/* Input gedeelte */}
-      <InputWizard onSubmit={setChecklist} />
+      {/* Inputgedeelte */}
+      <InputWizard onChecklistGenerated={setChecklist} />
 
-      {/* Output gedeelte */}
+      {/* Outputgedeelte */}
       <ChecklistOutput checklist={checklist} />
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
