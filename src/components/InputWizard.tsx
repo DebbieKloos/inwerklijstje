@@ -1,70 +1,80 @@
-import { generateChecklist } from '@/lib/sorter'
 import React, { useState } from 'react'
+import { generateChecklist } from '../lib/sorter'
+import { FormData } from '../App'
 
 interface InputWizardProps {
   onSubmit: (data: any) => void
 }
 
 function InputWizard({ onSubmit }: InputWizardProps) {
-  const [functie, setFunctie] = useState('')
-  const [startdatum, setStartdatum] = useState('')
-  const [taken, setTaken] = useState(['', '', ''])
+  const [formData, setFormData] = useState<FormData>({
+    functie: '',
+    startdatum: '',
+    taken: ['', '', '']
+  })
 
-  const handleTaskChange = (index: number, value: string) => {
-    const newTaken = [...taken]
-    newTaken[index] = value
-    setTaken(newTaken)
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index?: number) => {
+    const { name, value } = e.target
+    if (name === 'taak' && index !== undefined) {
+      const newTaken = [...formData.taken]
+      newTaken[index] = value
+      setFormData({ ...formData, taken: newTaken })
+    } else {
+      setFormData({ ...formData, [name]: value })
+    }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    const bullets = taken.filter(t => t.trim().length > 0)
-    const checklist = generateChecklist(bullets, startdatum)
-    onSubmit(checklist)
+    // Maak een checklist met de ingevulde data
+    const checklist = generateChecklist(formData.taken, formData.startdatum)
+    // Geef het resultaat door aan de parent (App.tsx)
+    onSubmit({ ...formData, checklist })
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block mb-1">Functie nieuwe medewerker</label>
+        <label className="block text-sm font-medium">Functie nieuwe medewerker</label>
         <input
           type="text"
-          value={functie}
-          onChange={(e) => setFunctie(e.target.value)}
+          name="functie"
+          value={formData.functie}
+          onChange={handleChange}
           placeholder="Bijv. Verkoper, Kassamedewerker, Barista"
-          className="border p-2 rounded w-full"
+          className="mt-1 block w-full rounded border px-2 py-1"
         />
       </div>
 
       <div>
-        <label className="block mb-1">Startdatum</label>
+        <label className="block text-sm font-medium">Startdatum</label>
         <input
           type="date"
-          value={startdatum}
-          onChange={(e) => setStartdatum(e.target.value)}
-          className="border p-2 rounded w-full"
+          name="startdatum"
+          value={formData.startdatum}
+          onChange={handleChange}
+          className="mt-1 block w-full rounded border px-2 py-1"
         />
       </div>
 
       <div>
-        <label className="block mb-1">
-          Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?
-        </label>
-        {taken.map((taak, index) => (
+        <label className="block text-sm font-medium">Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?</label>
+        {formData.taken.map((taak, i) => (
           <input
-            key={index}
+            key={i}
             type="text"
+            name="taak"
             value={taak}
-            onChange={(e) => handleTaskChange(index, e.target.value)}
-            placeholder={`Taak ${index + 1}`}
-            className="border p-2 rounded w-full mb-2"
+            onChange={(e) => handleChange(e, i)}
+            placeholder={`Taak ${i + 1}`}
+            className="mt-1 block w-full rounded border px-2 py-1"
           />
         ))}
       </div>
 
       <button
         type="submit"
-        className="bg-blue-600 text-white px-4 py-2 rounded"
+        className="w-full rounded bg-blue-600 py-2 text-white font-semibold hover:bg-blue-700"
       >
         Maak mijn inwerklijstje
       </button>
