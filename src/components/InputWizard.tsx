@@ -1,80 +1,76 @@
 import React, { useState } from 'react'
 import { generateChecklist } from '../lib/sorter'
-import { FormData } from '../App'
 
 interface InputWizardProps {
-  onSubmit: (data: any) => void
+  onSubmit: (checklist: string[]) => void
 }
 
 function InputWizard({ onSubmit }: InputWizardProps) {
-  const [formData, setFormData] = useState<FormData>({
-    functie: '',
-    startdatum: '',
-    taken: ['', '', '']
-  })
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, index?: number) => {
-    const { name, value } = e.target
-    if (name === 'taak' && index !== undefined) {
-      const newTaken = [...formData.taken]
-      newTaken[index] = value
-      setFormData({ ...formData, taken: newTaken })
-    } else {
-      setFormData({ ...formData, [name]: value })
-    }
-  }
+  const [functie, setFunctie] = useState('')
+  const [startdatum, setStartdatum] = useState('')
+  const [taken, setTaken] = useState(['', '', ''])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Maak een checklist met de ingevulde data
-    const checklist = generateChecklist(formData.taken, formData.startdatum)
-    // Geef het resultaat door aan de parent (App.tsx)
-    onSubmit({ ...formData, checklist })
+
+    // Maak bullets van de 3 losse taken
+    const bullets = taken.filter((t) => t.trim() !== '')
+
+    // Genereer checklist met slimme volgorde
+    const checklist = generateChecklist(bullets, startdatum)
+
+    // Geef door aan App
+    onSubmit(checklist)
+  }
+
+  const updateTaak = (index: number, value: string) => {
+    const nieuweTaken = [...taken]
+    nieuweTaken[index] = value
+    setTaken(nieuweTaken)
   }
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium">Functie nieuwe medewerker</label>
+        <label className="block font-medium">Functie nieuwe medewerker</label>
         <input
           type="text"
-          name="functie"
-          value={formData.functie}
-          onChange={handleChange}
+          value={functie}
+          onChange={(e) => setFunctie(e.target.value)}
           placeholder="Bijv. Verkoper, Kassamedewerker, Barista"
-          className="mt-1 block w-full rounded border px-2 py-1"
+          className="w-full border rounded p-2"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Startdatum</label>
+        <label className="block font-medium">Startdatum</label>
         <input
           type="date"
-          name="startdatum"
-          value={formData.startdatum}
-          onChange={handleChange}
-          className="mt-1 block w-full rounded border px-2 py-1"
+          value={startdatum}
+          onChange={(e) => setStartdatum(e.target.value)}
+          className="w-full border rounded p-2"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?</label>
-        {formData.taken.map((taak, i) => (
+        <label className="block font-medium">
+          Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?
+        </label>
+        {taken.map((taak, i) => (
           <input
             key={i}
             type="text"
-            name="taak"
             value={taak}
-            onChange={(e) => handleChange(e, i)}
+            onChange={(e) => updateTaak(i, e.target.value)}
             placeholder={`Taak ${i + 1}`}
-            className="mt-1 block w-full rounded border px-2 py-1"
+            className="w-full border rounded p-2 mb-2"
           />
         ))}
       </div>
 
       <button
         type="submit"
-        className="w-full rounded bg-blue-600 py-2 text-white font-semibold hover:bg-blue-700"
+        className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
       >
         Maak mijn inwerklijstje
       </button>
