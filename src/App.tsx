@@ -1,54 +1,22 @@
 import React, { useState } from 'react'
 import InputWizard from './components/InputWizard'
-import AIProcessing from './components/AIProcessing'
 import ChecklistOutput from './components/ChecklistOutput'
-
-export interface FormData {
-  functie: string
-  startdatum: string
-  taken: [string, string, string]
-}
+import './App.css'
 
 function App() {
-  const [currentScreen, setCurrentScreen] = useState<'input' | 'processing' | 'checklist'>('input')
-  const [formData, setFormData] = useState<FormData>({
-    functie: '',
-    startdatum: '',
-    taken: ['', '', '']
-  })
-
-  const handleFormSubmit = (data: FormData) => {
-    setFormData(data)
-    setCurrentScreen('processing')
-  }
-
-  const handleProcessingComplete = () => {
-    setCurrentScreen('checklist')
-  }
-
-  const handleNewEmployee = () => {
-    setCurrentScreen('input')
-    setFormData({
-      functie: '',
-      startdatum: '',
-      taken: ['', '', '']
-    })
-  }
+  const [checklist, setChecklist] = useState<string[]>([])
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {currentScreen === 'input' && (
-        <InputWizard onSubmit={handleFormSubmit} />
-      )}
-      {currentScreen === 'processing' && (
-        <AIProcessing onComplete={handleProcessingComplete} />
-      )}
-      {currentScreen === 'checklist' && (
-        <ChecklistOutput 
-          formData={formData}
-          onNewEmployee={handleNewEmployee}
-        />
-      )}
+    <div className="max-w-2xl mx-auto p-6">
+      <h1 className="text-2xl font-bold mb-6 text-center">
+        Slim Inwerklijstje
+      </h1>
+
+      {/* Input gedeelte */}
+      <InputWizard onSubmit={setChecklist} />
+
+      {/* Output gedeelte */}
+      <ChecklistOutput checklist={checklist} />
     </div>
   )
 }
