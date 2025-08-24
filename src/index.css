@@ -76,3 +76,56 @@ code {
     opacity: .5;
   }
 }
+/* Alleen printen wat in #print-area staat */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #print-area,
+  #print-area * {
+    visibility: visible;
+  }
+  #print-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+
+  /* Optioneel: marges en typografie voor mooiere A4 */
+  @page {
+    margin: 15mm;
+  }
+
+  #print-area h2 {
+    font-size: 18pt;
+    margin-bottom: 10px;
+  }
+
+  #print-area h3 {
+    font-size: 14pt;
+    margin-top: 15px;
+  }
+
+  #print-area ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  #print-area li {
+    border: 1px solid #ccc;
+    padding: 6px;
+    margin-bottom: 6px;
+    border-radius: 6px;
+  }
+
+  /* Checkboxen niet zichtbaar bij print */
+  #print-area input[type="checkbox"] {
+    display: none;
+  }
+
+  /* Knoppen onderaan niet printen */
+  button {
+    display: none !important;
+  }
+}
