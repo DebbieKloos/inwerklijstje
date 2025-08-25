@@ -1,21 +1,29 @@
-export interface ChecklistItem {
-  periode: string;
-  tasks: string[];
-}
+export function generateChecklist(taken: string[], startDate: string, notities?: string) {
+  const checklist: { dag: string; taken: string[] }[] = [];
 
-export function generateChecklist(bullets: string[], startDate: string): ChecklistItem[] {
-  const checklist: ChecklistItem[] = [
-    { periode: "Dag 1", tasks: [] },
-    { periode: "Week 1", tasks: [] },
-    { periode: "Week 2", tasks: [] },
-  ];
-
-  bullets.forEach((bullet, index) => {
-    if (index === 0) checklist[0].tasks.push(bullet);        // altijd Dag 1
-    else if (index === 1) checklist[1].tasks.push(bullet);   // tweede naar Week 1
-    else checklist[2].tasks.push(bullet);                    // rest naar Week 2
+  // Basisdagen/weken
+  checklist.push({
+    dag: "Dag 1",
+    taken: ["Welkom & rondleiding", "Inloggegevens + kassasysteem instellen", ...taken.filter(t => t.trim() !== "")]
   });
 
-  console.log("Checklist gemaakt voor startdatum:", startDate);
+  checklist.push({
+    dag: "Week 1",
+    taken: ["Eerste klantgesprek samen voeren", "Samen evalueren eind week", "Feedbackmoment plannen"]
+  });
+
+  checklist.push({
+    dag: "Week 2",
+    taken: ["Zelfstandig klantgesprek", "Evaluatiegesprek plannen"]
+  });
+
+  // Voeg notities toe als extra blok
+  if (notities && notities.trim() !== "") {
+    checklist.push({
+      dag: "Opmerkingen ondernemer",
+      taken: notities.split('\n').map(line => line.trim()).filter(line => line !== "")
+    });
+  }
+
   return checklist;
 }
