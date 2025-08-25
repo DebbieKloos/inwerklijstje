@@ -3,20 +3,19 @@ export interface ChecklistItem {
   tasks: string[];
 }
 
-export function generateChecklist(tasks: string[], startDate: string): ChecklistItem[] {
-  // Basisindeling: eerste taak = Dag 1, tweede = Week 1, derde = Week 2
+export function generateChecklist(bullets: string[], startDate: string): ChecklistItem[] {
   const checklist: ChecklistItem[] = [
     { periode: "Dag 1", tasks: [] },
     { periode: "Week 1", tasks: [] },
     { periode: "Week 2", tasks: [] },
   ];
 
-  if (tasks[0]) checklist[0].tasks.push(tasks[0]);
-  if (tasks[1]) checklist[1].tasks.push(tasks[1]);
-  if (tasks[2]) checklist[2].tasks.push(tasks[2]);
+  bullets.forEach((bullet, index) => {
+    if (index === 0) checklist[0].tasks.push(bullet);        // altijd Dag 1
+    else if (index === 1) checklist[1].tasks.push(bullet);   // tweede naar Week 1
+    else checklist[2].tasks.push(bullet);                    // rest naar Week 2
+  });
 
-  // Debug info
   console.log("Checklist gemaakt voor startdatum:", startDate);
-
   return checklist;
 }
