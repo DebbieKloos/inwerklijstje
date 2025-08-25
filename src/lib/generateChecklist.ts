@@ -1,15 +1,32 @@
-export function generateChecklist(taken: string[], startDate: string, notities?: string) {
-  const checklist: { dag: string; taken: string[] }[] = [];
+export interface ChecklistItem {
+  dag: string;
+  taken: string[];
+}
+
+export function generateChecklist(
+  taken: string[],
+  startDate: string,
+  notities?: string
+): ChecklistItem[] {
+  const checklist: ChecklistItem[] = [];
 
   // Basisdagen/weken
   checklist.push({
     dag: "Dag 1",
-    taken: ["Welkom & rondleiding", "Inloggegevens + kassasysteem instellen", ...taken.filter(t => t.trim() !== "")]
+    taken: [
+      "Welkom & rondleiding",
+      "Inloggegevens + kassasysteem instellen",
+      ...taken.filter((t) => t.trim() !== "")
+    ]
   });
 
   checklist.push({
     dag: "Week 1",
-    taken: ["Eerste klantgesprek samen voeren", "Samen evalueren eind week", "Feedbackmoment plannen"]
+    taken: [
+      "Eerste klantgesprek samen voeren",
+      "Samen evalueren eind week",
+      "Feedbackmoment plannen"
+    ]
   });
 
   checklist.push({
@@ -21,7 +38,10 @@ export function generateChecklist(taken: string[], startDate: string, notities?:
   if (notities && notities.trim() !== "") {
     checklist.push({
       dag: "Opmerkingen ondernemer",
-      taken: notities.split('\n').map(line => line.trim()).filter(line => line !== "")
+      taken: notities
+        .split("\n")
+        .map((line) => line.trim())
+        .filter((line) => line !== "")
     });
   }
 
