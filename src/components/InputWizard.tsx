@@ -13,7 +13,10 @@ function InputWizard({ onSubmit }: InputWizardProps) {
     notities: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index?: number
+  ) => {
     const { name, value } = e.target;
 
     if (name === 'taak' && index !== undefined) {
@@ -56,7 +59,9 @@ function InputWizard({ onSubmit }: InputWizardProps) {
       </div>
 
       <div>
-        <label className="block font-medium">Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?</label>
+        <label className="block font-medium">
+          Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?
+        </label>
         {formData.taken.map((taak, index) => (
           <input
             key={index}
