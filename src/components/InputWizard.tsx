@@ -1,54 +1,86 @@
 import React, { useState } from 'react';
-import { generateChecklist, ChecklistItem } from '../lib/generateChecklist';
+import { FormData } from '../App';
 
 interface InputWizardProps {
-  onChecklistGenerated: (checklist: ChecklistItem[]) => void;
+  onSubmit: (data: FormData) => void;
 }
 
-function InputWizard({ onChecklistGenerated }: InputWizardProps) {
-  const [functie, setFunctie] = useState('');
-  const [startdatum, setStartdatum] = useState('');
-  const [notities, setNotities] = useState('');
+function InputWizard({ onSubmit }: InputWizardProps) {
+  const [formData, setFormData] = useState<FormData>({
+    functie: '',
+    startdatum: '',
+    taken: ['', '', ''],
+    notities: ''
+  });
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
+    const { name, value } = e.target;
+
+    if (name === 'taak' && index !== undefined) {
+      const updatedTaken = [...formData.taken];
+      updatedTaken[index] = value;
+      setFormData({ ...formData, taken: updatedTaken });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Splits notities in regels
-    const bullets = notities
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line.length > 0);
-
-    // Maak gestructureerde checklist
-    const checklist = generateChecklist(bullets, startdatum);
-    onChecklistGenerated(checklist);
+    onSubmit(formData);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <h2 className="text-xl font-bold">Slim Inwerklijstje</h2>
+      <div>
+        <label className="block font-medium">Functie nieuwe medewerker</label>
+        <input
+          type="text"
+          name="functie"
+          placeholder="Bijv. Verkoper, Kassamedewerker, Barista"
+          value={formData.functie}
+          onChange={handleChange}
+          className="mt-1 block w-full border rounded p-2"
+        />
+      </div>
 
-      <input
-        type="text"
-        placeholder="Functie nieuwe medewerker"
-        value={functie}
-        onChange={(e) => setFunctie(e.target.value)}
-        className="w-full border rounded p-2"
-      />
+      <div>
+        <label className="block font-medium">Startdatum</label>
+        <input
+          type="date"
+          name="startdatum"
+          value={formData.startdatum}
+          onChange={handleChange}
+          className="mt-1 block w-full border rounded p-2"
+        />
+      </div>
 
-      <input
-        type="date"
-        value={startdatum}
-        onChange={(e) => setStartdatum(e.target.value)}
-        className="w-full border rounded p-2"
-      />
+      <div>
+        <label className="block font-medium">Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?</label>
+        {formData.taken.map((taak, index) => (
+          <input
+            key={index}
+            type="text"
+            name="taak"
+            placeholder={`Taak ${index + 1}`}
+            value={taak}
+            onChange={(e) => handleChange(e, index)}
+            className="mt-1 block w-full border rounded p-2"
+          />
+        ))}
+      </div>
 
-      <textarea
-        placeholder="Typ hier alles wat je wilt bespreken of regelen..."
-        value={notities}
-        onChange={(e) => setNotities(e.target.value)}
-        className="w-full border rounded p-2 h-40"
-      />
+      <div>
+        <label className="block font-medium">Aanvullende notities</label>
+        <textarea
+          name="notities"
+          placeholder="Bijvoorbeeld: extra uitleg over product X, intro met team Y..."
+          value={formData.notities}
+          onChange={handleChange}
+          className="mt-1 block w-full border rounded p-2"
+          rows={4}
+        />
+      </div>
 
       <button
         type="submit"
