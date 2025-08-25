@@ -1,38 +1,48 @@
-import React from 'react';
+import React from "react";
+import { ChecklistItem } from "../lib/generateChecklist";
 
 interface ChecklistOutputProps {
-  functie: string;
-  startdatum: string;
-  taken: string[];
+  checklist: ChecklistItem[];
 }
 
-const ChecklistOutput: React.FC<ChecklistOutputProps> = ({ functie, startdatum, taken }) => {
-  return (
-    <div className="p-4 border rounded bg-white shadow">
-      <h2 className="text-xl font-bold mb-4">Inwerklijstje voor {functie}</h2>
-      <p className="mb-2 text-gray-600">Startdatum: {startdatum}</p>
-
-      <div className="space-y-2">
-        {taken && taken.length > 0 ? (
-          taken.map((taak, index) => (
-            <div
-              key={index}
-              className="p-2 border rounded bg-gray-50"
-            >
-              {taak.trim() !== '' ? taak : 'Nog geen taak ingevuld'}
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500">Geen taken ingevoerd.</p>
-        )}
+const ChecklistOutput: React.FC<ChecklistOutputProps> = ({ checklist }) => {
+  if (!checklist || checklist.length === 0) {
+    return (
+      <div className="mt-6 p-4 border rounded bg-gray-50 text-gray-600">
+        Nog geen inwerklijstje aangemaakt.
       </div>
+    );
+  }
 
-      <button
-        onClick={() => window.print()}
-        className="mt-4 px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-      >
-        Print deze lijst
-      </button>
+  const handlePrint = () => {
+    window.print();
+  };
+
+  return (
+    <div className="mt-6 p-4 border rounded bg-white shadow" id="print-area">
+      <h2 className="text-xl font-bold mb-4">Jouw Inwerklijstje</h2>
+
+      {checklist.map((item, i) => (
+        <div key={i} className="mb-4">
+          <h3 className="text-lg font-semibold mb-2">{item.periode}</h3>
+          <ul className="list-disc pl-6 space-y-1">
+            {item.tasks.map((task, j) => (
+              <li key={j} className="text-gray-800">
+                {task}
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+
+      <div className="mt-4">
+        <button
+          onClick={handlePrint}
+          className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 print:hidden"
+        >
+          Print deze lijst
+        </button>
+      </div>
     </div>
   );
 };
