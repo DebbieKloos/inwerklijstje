@@ -24,9 +24,9 @@ const ChecklistOutput: React.FC<ChecklistOutputProps> = ({ checklist }) => {
 
       {checklist.map((item, i) => (
         <div key={i} className="mb-4">
-          <h3 className="text-lg font-semibold mb-2">{item.periode}</h3>
+          <h3 className="text-lg font-semibold mb-2">{item.dag}</h3>
           <ul className="list-disc pl-6 space-y-1">
-            {item.tasks.map((task, j) => (
+            {item.taken.map((task, j) => (
               <li key={j} className="text-gray-800">
                 {task}
               </li>
