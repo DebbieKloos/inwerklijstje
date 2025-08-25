@@ -13,10 +13,10 @@ function App() {
         Slim Inwerklijstje
       </h1>
 
-      {/* Inputgedeelte */}
+      {/* Input gedeelte */}
       <InputWizard onChecklistGenerated={setChecklist} />
 
-      {/* Outputgedeelte */}
+      {/* Output gedeelte */}
       <ChecklistOutput checklist={checklist} />
     </div>
   );
