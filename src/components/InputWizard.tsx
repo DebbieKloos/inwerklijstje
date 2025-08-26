@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { generateChecklist } from '../lib/sorter';
+import { generateChecklist } from '../lib/generateChecklist';
 
 interface InputWizardProps {
   onSubmit: (data: any) => void;
@@ -9,8 +9,8 @@ function InputWizard({ onSubmit }: InputWizardProps) {
   const [formData, setFormData] = useState({
     functie: '',
     startdatum: '',
-    taken: ['', '', ''], // drie taakvelden
-    notities: '',        // apart notitieveld
+    taken: ['', '', ''],
+    notities: '',
   });
 
   const handleChange = (
@@ -30,10 +30,10 @@ function InputWizard({ onSubmit }: InputWizardProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const checklist = generateChecklist(
-      formData.taken,
+      formData.functie,
       formData.startdatum,
-      formData.notities,
-      formData.functie // toegevoegd
+      formData.taken,
+      formData.notities
     );
     onSubmit(checklist);
   };
@@ -41,9 +41,7 @@ function InputWizard({ onSubmit }: InputWizardProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium">
-          Functie nieuwe medewerker
-        </label>
+        <label className="block text-sm font-medium">Functie nieuwe medewerker</label>
         <input
           type="text"
           name="functie"
@@ -83,9 +81,7 @@ function InputWizard({ onSubmit }: InputWizardProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium">
-          Extra notities van de ondernemer
-        </label>
+        <label className="block text-sm font-medium">Extra notities van de ondernemer</label>
         <textarea
           name="notities"
           value={formData.notities}
