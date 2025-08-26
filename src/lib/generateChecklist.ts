@@ -1,4 +1,6 @@
-// Zet de default checklist direct hier in plaats van apart bestand
+// generateChecklist.ts
+
+// Zet de default checklist direct hier in plaats van apart bestand (of importeer als je defaultChecklist.ts gebruikt)
 const defaultChecklist = [
   {
     title: "Voor de eerste werkdag",
@@ -6,8 +8,7 @@ const defaultChecklist = [
       "Welkomstmail met praktische info en een persoonlijk welkom.",
       "Korte introductie van het bedrijf (missie, waarden, sfeer, foto’s van het team).",
       "Planning voor de eerste week (tip: deel deze inwerklijst!)"
-    ],
-    question: "Wat wil je dat de nieuwe medewerker al vóór dag 1 weet of ontvangt?"
+    ]
   },
   {
     title: "Stap 1 – welkom & basis",
@@ -16,8 +17,7 @@ const defaultChecklist = [
       "Rondleiding en kennismaking met het team.",
       "Veiligheidsinstructies en praktische afspraken (pauzes, werktijden).",
       "Praktische zaken (laptop, telefoon, systemen, sleutels, kleding)."
-    ],
-    question: "Wat wil jij zelf als ondernemer op dag 1 laten zien of regelen?"
+    ]
   },
   {
     title: "Stap 2 – verbinding & inwerken",
@@ -26,8 +26,7 @@ const defaultChecklist = [
       "Eerste deel van een taak zelfstandig uitvoeren en bespreken.",
       "Lunch of koffiemoment met het team.",
       "Uitleg van de belangrijkste werkwijzen of systemen."
-    ],
-    question: "Wat kan het team doen om de nieuwe medewerker welkom te laten voelen?"
+    ]
   },
   {
     title: "Stap 3 – eerste stappen in het werk",
@@ -37,20 +36,17 @@ const defaultChecklist = [
       "Korte check-in: hoe gaat het, wat heb je nodig om je werk te kunnen doen?",
       "Terugblik eind week: wat ging goed, wat wil je nog leren?",
       "Vooruitblik komende week: acties, belangrijk om te onthouden."
-    ],
-    question: "Welke eerste taken wil je de nieuwe medewerker laten doen?"
+    ]
   },
   {
     title: "Mijn aantekeningen",
-    tasks: [],
-    question: "Welke aandachtspunten of ideeën wil je voor jezelf onthouden? (gebruik ';' om notities te scheiden)"
+    tasks: []
   }
 ];
 
 interface ChecklistItem {
   dag: string;
   taak: string;
-  owner: string;
 }
 
 export function generateChecklist(
@@ -66,8 +62,7 @@ export function generateChecklist(
     section.tasks.forEach(task => {
       checklist.push({
         dag: section.title,
-        taak: task,
-        owner: "" // owner laten we leeg
+        taak: task
       });
     });
 
@@ -76,12 +71,28 @@ export function generateChecklist(
         if (note.trim()) {
           checklist.push({
             dag: section.title,
-            taak: note.trim(),
-            owner: ""
+            taak: note.trim()
           });
         }
       });
     }
   });
 
-  // Extra:
+  // Extra: functie (indien ingevuld)
+  if (functie) {
+    checklist.push({
+      dag: "Stap 1 – welkom & basis",
+      taak: `Introductie van functie: ${functie}`
+    });
+  }
+
+  // Extra: losse taken uit formulier
+  taken.forEach(t => {
+    checklist.push({
+      dag: "Stap 3 – eerste stappen in het werk",
+      taak: t
+    });
+  });
+
+  return checklist;
+}
