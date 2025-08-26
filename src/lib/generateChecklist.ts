@@ -22,4 +22,41 @@ export function generateChecklist(
       checklist.push({
         dag: section.title,
         taak: task,
-        owner: "" // leeg, want owner gebruiken we n
+        owner: "" // leeg, want owner gebruiken we niet meer
+      });
+    });
+
+    // notities-blok: splitsen op ;
+    if (section.title === "Mijn aantekeningen" && notities) {
+      notities.split(";").forEach(note => {
+        if (note.trim()) {
+          checklist.push({
+            dag: section.title,
+            taak: note.trim(),
+            owner: ""
+          });
+        }
+      });
+    }
+  });
+
+  // Extra: functie (indien ingevuld)
+  if (functie) {
+    checklist.push({
+      dag: "Stap 1 – welkom & basis",
+      taak: `Introductie van functie: ${functie}`,
+      owner: ""
+    });
+  }
+
+  // Extra: losse taken uit formulier
+  taken.forEach(t => {
+    checklist.push({
+      dag: "Stap 3 – eerste stappen in het werk",
+      taak: t,
+      owner: ""
+    });
+  });
+
+  return checklist;
+}
