@@ -1,6 +1,6 @@
-// generateChecklist.ts
+// src/lib/generateChecklist.ts
 
-// Zet de default checklist direct hier in plaats van apart bestand (of importeer als je defaultChecklist.ts gebruikt)
+// Default checklist direct hier (of importeer als je een apart bestand gebruikt)
 const defaultChecklist = [
   {
     title: "Voor de eerste werkdag",
@@ -66,6 +66,7 @@ export function generateChecklist(
       });
     });
 
+    // Mijn aantekeningen → splitsen op ;
     if (section.title === "Mijn aantekeningen" && notities) {
       notities.split(";").forEach(note => {
         if (note.trim()) {
