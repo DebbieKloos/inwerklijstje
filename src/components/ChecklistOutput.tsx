@@ -3,8 +3,7 @@ import React from 'react';
 interface ChecklistItem {
   dag: string;
   taak: string;
-  owner: string;
-}
+  }
 
 interface ChecklistOutputProps {
   checklist: ChecklistItem[];
@@ -24,8 +23,7 @@ function ChecklistOutput({ checklist }: ChecklistOutputProps) {
       <h2 className="text-lg font-bold mb-4">Jouw Inwerklijstje</h2>
       {checklist.map((item, idx) => (
         <div key={idx} className="mb-2">
-          <strong>{item.dag}:</strong> {item.taak} <br />
-          <span className="text-sm text-gray-600">Owner: {item.owner}</span>
+         <strong>{item.dag}:</strong> {item.taak}
         </div>
       ))}
 
