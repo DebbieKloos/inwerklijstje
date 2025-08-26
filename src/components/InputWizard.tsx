@@ -10,10 +10,13 @@ function InputWizard({ onSubmit }: InputWizardProps) {
     functie: '',
     startdatum: '',
     taken: ['', '', ''], // drie taakvelden
-    notities: ''         // apart notitieveld
+    notities: '',        // apart notitieveld
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, index?: number) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    index?: number
+  ) => {
     const { name, value } = e.target;
     if (name === 'taak' && index !== undefined) {
       const updatedTaken = [...formData.taken];
@@ -26,14 +29,21 @@ function InputWizard({ onSubmit }: InputWizardProps) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const checklist = generateChecklist(formData.taken, formData.startdatum, formData.notities);
+    const checklist = generateChecklist(
+      formData.taken,
+      formData.startdatum,
+      formData.notities,
+      formData.functie // toegevoegd
+    );
     onSubmit(checklist);
   };
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       <div>
-        <label className="block text-sm font-medium">Functie nieuwe medewerker</label>
+        <label className="block text-sm font-medium">
+          Functie nieuwe medewerker
+        </label>
         <input
           type="text"
           name="functie"
@@ -56,7 +66,9 @@ function InputWizard({ onSubmit }: InputWizardProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?</label>
+        <label className="block text-sm font-medium">
+          Wat zijn 3 dingen die de eerste week sowieso moeten gebeuren?
+        </label>
         {formData.taken.map((taak, index) => (
           <input
             key={index}
@@ -71,7 +83,9 @@ function InputWizard({ onSubmit }: InputWizardProps) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium">Extra notities van de ondernemer</label>
+        <label className="block text-sm font-medium">
+          Extra notities van de ondernemer
+        </label>
         <textarea
           name="notities"
           value={formData.notities}
