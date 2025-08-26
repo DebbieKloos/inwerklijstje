@@ -1,4 +1,4 @@
-// ChecklistOutput.tsx
+// src/components/ChecklistOutput.tsx
 import React, { useState } from "react";
 
 interface ChecklistItem {
@@ -11,14 +11,13 @@ interface ChecklistOutputProps {
 }
 
 export function ChecklistOutput({ checklist }: ChecklistOutputProps) {
-  // State om afgevinkte taken bij te houden
   const [checked, setChecked] = useState<{ [key: string]: boolean }>({});
 
   const toggleCheck = (key: string) => {
     setChecked(prev => ({ ...prev, [key]: !prev[key] }));
   };
 
-  // Groepeer taken per "dag"/blok
+  // Taken groeperen per blok
   const grouped = checklist.reduce((acc: { [dag: string]: string[] }, item) => {
     if (!acc[item.dag]) acc[item.dag] = [];
     acc[item.dag].push(item.taak);
@@ -40,20 +39,3 @@ export function ChecklistOutput({ checklist }: ChecklistOutputProps) {
                   <input
                     type="checkbox"
                     className="mr-2"
-                    checked={!!checked[key]}
-                    onChange={() => toggleCheck(key)}
-                  />
-                  <span
-                    className={checked[key] ? "line-through text-gray-500" : ""}
-                  >
-                    {taak}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
-}
