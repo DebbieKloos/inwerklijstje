@@ -1,3 +1,5 @@
+import { defaultChecklist } from "./defaultChecklist";
+
 interface ChecklistItem {
   dag: string;
   taak: string;
@@ -13,33 +15,11 @@ export function generateChecklist(
   // Basisregels
   const checklist: ChecklistItem[] = [];
 
-  if (functie) {
-    checklist.push({
-      dag: "Dag 1",
-      taak: `Introductie van functie: ${functie}`,
-      owner: "Leidinggevende"
-    });
-  }
-
-  // Taken uit formulier
-  taken.forEach((taak, i) => {
-    if (taak.trim() !== '') {
+  // Voeg standaard inwerklijst toe
+  defaultChecklist.forEach(section => {
+    // vaste taken toevoegen
+    section.tasks.forEach(task => {
       checklist.push({
-        dag: `Week 1`,
-        taak,
-        owner: "Mentor"
-      });
-    }
-  });
-
-  // Extra notities als apart onderdeel
-  if (notities.trim() !== '') {
-    checklist.push({
-      dag: "Opmerkingen ondernemer",
-      taak: notities,
-      owner: "Ondernemer"
-    });
-  }
-
-  return checklist;
-}
+        dag: section.title,
+        taak: task,
+        owner: "" // leeg, want owner gebruiken we n
